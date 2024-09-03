@@ -3,39 +3,52 @@ package main
 import (
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
-);
+)
 
 func main()  {
-	fmt.Println("Welcome to the File refresher");
+	fmt.Println("Let's talk file operations in golang");
 
-	var content string = "This text will surely be moved into a text file";
+	/*
+	 create a string e.g "This text will be tranfered to a file"
+	 create a file
+	 write the string to the created file
+	 read from the file
+	
+	*/
 
-	file, err := os.Create("./sample.txt");
+	content := "😃 Make sure you smile even in the storm";
 
-	handleError(err)
+	File, err := os.Create("sample.txt");
 
-	length, err := io.WriteString(file, content);
+	errorHandler(err);
 
-	handleError(err);
+	length, contentErr := io.WriteString(File, content);
 
-	fmt.Println("Total character contained in a file is: ", length);
-	defer file.Close();
+	errorHandler(contentErr);
 
-	readFile("./sample.txt");
+	fmt.Println("The length of this file is: ", length);
+
+	defer File.Close();
+	readFileContent("sample.txt");
+
 }
 
-func readFile(filename string) {
-	databyte, err := ioutil.ReadFile(filename);
-
-	handleError(err);
-
-	fmt.Println("Data bytes of the parsed file: ", string(databyte));
-}
-
-func handleError(err error) {
-	if (err != nil) {
+func errorHandler(err error) {
+	if err != nil {
 		panic(err);
 	}
 }
+
+
+func readFileContent(filename string) {
+	dataByte, err := os.ReadFile(filename);
+
+	errorHandler(err);
+
+	fmt.Println("The content of the file is: \n", string(dataByte))
+}
+	
+
+
+
